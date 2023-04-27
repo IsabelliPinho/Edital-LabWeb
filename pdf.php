@@ -12,14 +12,15 @@ portugues8+portugues9+matematica6+matematica7+matematica8+matematica9+ciencias6+
 +artes8+artes9+edfisica6+edfisica7+edfisica8+edfisica9)/32
 AS media */
 $sql=("SELECT nome_completo,media FROM aluno where curso = 'enfermagem' and concorrencia = '[publica]' and deficiencia = 'nenhuma' order by media desc limit 30");
-
-$query = ("SELECT nome_completo,media from aluno where curso = 'enfermagem' and deficiencia <>'nenhuma' and bairro = 'VenânciosI', order by media desc limit 2");
+$nsql = ("SELECT nome_completo,media FROM aluno order by media desc limit 30 offset 30");
+$query = ("SELECT nome_completo,media from aluno where curso = 'enfermagem' and deficiencia <> 'nenhuma'order by media desc limit 2");
 
 $mysqll = ("SELECT nome_completo,media from aluno where curso = 'enfermagem'  order by media desc limit 10");
 
 $my = ("SELECT nome_completo,media from aluno where curso = 'enfermagem' and concorrencia = '[privada]'  order by media desc limit 10");
 
 
+$buscar = mysqli_query($conn,$nsql);
 
 $busca = mysqli_query($conn,$sql);
 $search =  mysqli_query($conn,$query);
@@ -51,6 +52,17 @@ $pdf->ln();
 
 while ($resultado=mysqli_fetch_array($busca)) {
     // dimensões das células do pdf   
+    $pdf->Cell(120,7,$resultado['nome_completo'],1,0); 
+    $pdf->Cell(50,7,$resultado['media'],1,1);   
+}
+$pdf->ln(10); 
+
+$pdf->Cell(170,7,'Nâo Classificados',1,0,'C');
+$pdf->ln(); 
+
+while ($resultado=mysqli_fetch_array($buscar)) {
+    // dimensões das células do pdf   
+    $pdf->setFillColor(220,220,220);
     $pdf->Cell(120,7,$resultado['nome_completo'],1,0); 
     $pdf->Cell(50,7,$resultado['media'],1,1);   
 }
